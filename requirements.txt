@@ -27,6 +27,6 @@ mistune==3.0.2
 nest-asyncio==1.6.0
 numpy==1.26.3
 opencv-python==4.9.0.80
-Flask==2.0.2
+Flask>=2.0.2
 requests==2.26.0
 
