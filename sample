@@ -1,0 +1,40 @@
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+# Sample data (you can replace this with your own data storage mechanism)
+tasks = [
+    {"id": 1, "title": "Task 1", "description": "Description for Task 1", "done": False},
+    {"id": 2, "title": "Task 2", "description": "Description for Task 2", "done": False},
+    {"id": 3, "title": "Task 3", "description": "Description for Task 3", "done": True}
+]
+
+# Sample route to get all tasks
+@app.route('/tasks', methods=['GET'])
+def get_tasks():
+    return jsonify({'tasks': tasks})
+
+# Sample route to get a specific task by ID
+@app.route('/tasks/<int:task_id>', methods=['GET'])
+def get_task(task_id):
+    task = [task for task in tasks if task['id'] == task_id]
+    if len(task) == 0:
+        return jsonify({'error': 'Task not found'}), 404
+    return jsonify({'task': task[0]})
+
+# Sample route to create a new task
+@app.route('/tasks', methods=['POST'])
+def create_task():
+    if not request.json or 'title' not in request.json:
+        return jsonify({'error': 'Title is required'}), 400
+    task = {
+        'id': tasks[-1]['id'] + 1,
+        'title': request.json['title'],
+        'description': request.json.get('description', ""),
+        'done': False
+    }
+    tasks.append(task)
+    return jsonify({'task': task}), 201
+
+if __name__ == '__main__':
+    app.run(debug=True)
